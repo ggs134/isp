@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block body %}
+<!-- 글남기기폼 -->
+    <div class="well bs-component">
+              <form class="form-horizontal" action="{{ url_for('add1') }}" method=post>
+                <fieldset>
+                  <legend>글남기기</legend>
+
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">제목</label>
+                    <div class="col-lg-10">
+                      <input type="text" name=title class="form-control" id="inputEmail" placeholder="..제목을 입력해요">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="textArea" class="col-lg-2 control-label">내용</label>
+                    <div class="col-lg-10">
+                      <textarea class="form-control" name=text rows="3" id="textArea" placeholder="..무슨 생각을 하시나요?"></textarea>
+                      <span class="help-block"></span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="submit" class="btn btn-primary">공유하기</button>
+<!--                       <button type="reset" class="btn btn-default">지우기</button> -->
+                    </div>
+                  </div>
+
+                </fieldset>
+              </form>
+            <!-- <div id="source-button" class="btn btn-primary btn-xs" style="display: block;">&lt; &gt;</div> -->
+</div>
+
+<!-- 글목록 -->
+<legend>글목록</legend>
+
+  <!-- 페이지목록 -->
+  <nav>
+    <ul class="pagination">
+      <li>
+        <a href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+        {% for i in range(1,total_page_number) %}
+        <li><a href="{{url_for('board1',page_number=i)}}">{{i}}</a></li>
+        {% endfor%}
+
+      <li>
+        <a href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+ {% for entry in writings1 %}
+ <div class="well">
+    <div class="row">
+              <div class="col-lg-4">
+                <div class="bs-component">
+                  <h2>{{ entry.title }}</h2>
+                  <p>{{ entry.text|safe }}</p>
+                </div>
+              </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

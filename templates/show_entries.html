@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block body %}
+<!-- 글남기기폼 -->
+      {% if session.logged_in %}
+    <div class="well bs-component">
+              <form class="form-horizontal" action='{{ url_for('add_entry') }}' method=post>
+                <fieldset>
+                  <legend>글남기기</legend>
+
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label">제목</label>
+                    <div class="col-lg-10">
+                      <input type="text" name=title class="form-control" id="inputEmail" placeholder="..제목을 입력해요">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="textArea" class="col-lg-2 control-label">내용</label>
+                    <div class="col-lg-10">
+                      <textarea class="form-control" name=text rows="3" id="textArea" placeholder="..무슨 생각을 하시나요?"></textarea>
+                      <span class="help-block"></span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="submit" class="btn btn-primary">공유하기</button>
+                      <button type="reset" class="btn btn-default">지우기</button>
+                    </div>
+                  </div>
+
+                </fieldset>
+              </form>
+            <div id="source-button" class="btn btn-primary btn-xs" style="display: block;">&lt; &gt;</div></div>
+    {% endif %}
+
+<!-- 점보트론 -->
+  <div class="jumbotron">
+<div class="container">
+<br><br>
+  <h2>안녕 얘들아?ㅋㅋ</h2>
+        <p>"카더라(괴소문)"는 여기저기 소문은 들리지만 확인 되지 않은 사실을 올리는 곳 이야 <br>"남자와여자"는 그와 그녀에 관한 이야기를 올리는 곳이야</p>
+        <p>
+          <a class="btn </div>btn-primary btn-lg" href='{{url_for('board1',page_number=1)}}' role="button">카더라(괴소문)로 이동»</a>
+          <a class="btn </div>btn-primary btn-lg" href='{{url_for('board2',page_number=1)}}' role="button">남자와여자로 이동»</a>
+        </p>
+      </div>
+
+</div>
+
+<!-- 공지사항 -->
+ {% for entry in entries %}
+ <div class="well">
+  <div class="row">
+            <div class="col-lg-4">
+              <div class="bs-component">
+                <h2>{{ entry.title }}</h2>
+                <p>{{ entry.text|safe }}</p>
+              </div>
+            </div>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
