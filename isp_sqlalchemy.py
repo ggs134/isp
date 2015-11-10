@@ -25,9 +25,12 @@ class Goal(Base):
 
 class Organization_goal(Base):
   __tablename__ = 'organization_goal'
-  organization_num = Column(Integer, ForeignKey('organization.organization_num'))
-  goal_num = Column(Integer, ForeignKey('goal.goal_num'))
+  organization_num = Column(Integer, ForeignKey('organization.organization_num'), primary_key=True)
+  goal_num = Column(Integer, ForeignKey('goal.goal_num'), primary_key=True)
   importance = Column(String(2))
 
-engine = create_engine('mysql://root:1127@localhost/isptest', encoding='utf8', echo=True)
+engine = create_engine("mysql://root:1127@localhost/isptest", encoding='utf8', echo=True)
 Base.metadata.create_all(engine)
+
+
+
