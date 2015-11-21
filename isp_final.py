@@ -31,7 +31,7 @@ class Object(Base): #목표
   obj_code = Column(char(3), primary_key=True)
   obj_desc = Column(varchar(40))
   obj_priority = Column(number(2))
-  dept_obj = relationship("Dept_obj", backref="object")
+  d_ob = relationship("Dept_obj", backref="object")
 
 
 engine = create_engine("mysql://root:1127@localhost/isp", encoding='utf8', echo=True)
