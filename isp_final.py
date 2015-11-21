@@ -1,3 +1,5 @@
+#-*-coding:utf-8-*-
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Unicode, String
@@ -16,7 +18,8 @@ class Department(Base): #조직
 #조직(department)은 조직내(department.d_o)를 이용해서 조직목표 클레스(Dept_obj)객체 참조가 가능하다.
 #또한 조직목표 클레스(Dept_obj)객체도 조직(department)을 참조 가능하다.
 
-class Dept_obj(Base): #조직목표
+#조직목표
+class Dept_obj(Base): 
   __tablename__ = 'dept_obj'
   dept_code = Column(char(4), ForeignKey('department.dept_code'), primary_key=True)
   obj_code = Column(char(3), ForeignKey('object.obj_code'), primary_key=True)
@@ -26,7 +29,8 @@ class Dept_obj(Base): #조직목표
   dept_obj_work = Column(char(1))
   dept_obj_ref = Column(char(1))
 
-class Object(Base): #목표
+#목표
+class Object(Base): 
   __tablename__ = 'object'
   obj_code = Column(char(3), primary_key=True)
   obj_desc = Column(varchar(40))
@@ -34,5 +38,5 @@ class Object(Base): #목표
   d_ob = relationship("Dept_obj", backref="object")
 
 
-engine = create_engine("mysql://root:1127@localhost/isp", encoding='utf8', echo=True)
+engine = create_engine("mysql://root:wjdtnsgud1!@localhost/isp", encoding='utf8', echo=True)
 Base.metadata.create_all(engine)

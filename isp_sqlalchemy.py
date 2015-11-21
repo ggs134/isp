@@ -29,7 +29,7 @@ class Organization_goal(Base):
   goal_num = Column(Integer, ForeignKey('goal.goal_num'), primary_key=True)
   importance = Column(String(2))
 
-engine = create_engine("mysql://root:1127@localhost/isptest", encoding='utf8', echo=True)
+engine = create_engine("mysql://root:rlagnlrud@52.192.98.130/isptest", encoding='utf8', echo=True)
 Base.metadata.create_all(engine)
 
 

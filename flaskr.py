@@ -5,17 +5,17 @@ from sqlalchemy import create_engine, desc, asc, func
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 # DB fils import 
-# from db_setup import Base, Entries, Board1, Board2
+from isp_final import Department, Dept_obj, Object
 
 from flask import Flask, request, redirect, url_for, abort, render_template, flash, jsonify
 from flask import session as login_session
 import sys
 
 #configuration
-DEBUG = True
-SECRET_KEY = '1234'
-USERNAME = 'adminJ'
-PASSWORD = 'wjdtnsgud1!'
+# DEBUG = True
+# SECRET_KEY = '1234'
+# USERNAME = 'adminJ'
+# PASSWORD = 'wjdtnsgud1!'
 
 #create our little application
 app=Flask(__name__)
@@ -24,10 +24,10 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 #Connect to Database and create database session
-# engine = create_engine("mysql://root:wjdtnsgud1!@localhodst/annonymous", encoding='utf8', echo=False)
-# Base.metadata.bind = engine
-# DBSession=scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
-# session = DBSession()
+engine = create_engine("mysql://root:wjdtnsgud1!@localhodst/isp", encoding='utf8', echo=False)
+Base.metadata.bind = engine
+DBSession=scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+session = DBSession()
 
 #main page
 @app.route('/')
