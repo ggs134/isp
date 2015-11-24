@@ -9,7 +9,7 @@ from json import dumps, loads
 from sqlalchemy.ext.declarative import declarative_base
 import sys
 
-# DB fils import 
+# DB fils import
 from isp_final import Base, Department, Dept_obj, Object
 
 #configuration
@@ -36,7 +36,7 @@ def show_deportment():
 	# entries=session.query(Entries).order_by(desc(Entries.id)).all()
 	# session.close()
 	return jsonify(greeting= 'Hello ISP!')
- 
+
 #Deportment
 @app.route('/department')
 def show_department():
@@ -50,7 +50,7 @@ def show_department():
 	return jsonify(results = converted_list)
 
 #Object Read
-@app.route('/object', methods=['GET','POST'])
+@app.route('/object', methods=['GET','POST','PUT','DELETE'])
 def show_object():
 
 	if request.method == "POST":
@@ -61,19 +61,23 @@ def show_object():
 	 	obj_code = data['obj_code'].encode('utf-8')
 	 	# obj_desc = data['obj_desc'].encode('utf-8')
 	 	# obj_priority = data['obj_priority'].encode('utf-8')
-	 	obj_desc = None
-	 	obj_priority = None
+	 	obj_desc = data['obj_desc'].encode('utf-8')
+	 	obj_priority = data['obj_priority'].encode('utf-8')
 
 		if idf == 'ShowObject':
 		  	query = session.query(Object)
+			#session = stream의 일종
+			#sqlalchemy의 Object클레스
 		  	#Select * from where obj_code == obj_code or obj_desc == %obj_desc% or obj_priority == obj_priority
 		  	# query_list = query.filter(Object.obj_code == obj_code, Object.obj_desc.like("%"+obj_desc+"%"), Object.obj_priority == obj_priority).all()
 
 		  	#This is needs to be converted complex 'where' condition.
 		  	# query_list = query.filter("obj_code =:obj_code").params(obj_code=obj_code).all()
-		  	query_list = query.from_statement("select * from object where obj_code=:obj_code OR obj_desc=:obj_desc").params(obj_code=obj_code, obj_desc=obj_desc)
-		  	# query_list = query.filter(Object.obj_code=obj_code).all()
-		  	
+		  	query_list = query.from_statement("select * from object where obj_code=:obj_code OR obj_desc=:obj_desc OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_desc=obj_desc, obj_priority=obj_priority).all()
+			#>>>>>>>>>> obj_desc의 쿼리 일부분만 검색, 일부 내용 검색 해도 가능하도록 정규표현식화?, sql, sqlalchemy에서 검색
+
+			# query_list = query.filter(Object.obj_code=obj_code).all()
+
 		  	#Check if there a queried list exists
 		  	if query_list is not None:
 		  		converted_list = []
@@ -84,8 +88,15 @@ def show_object():
 		  		session.close()
 		  		return jsonify(results = converted_list)
 		  	else:
-		  		return jsonify(results = 0)		
-		elif type(obj_code) == type("") :
+		  		return jsonify(results = "0")
+		elif idf == 'CreateObject':
+			newObj=Object(obj_code = obj_code, obj_desc = obj_desc, obj_priority = obj_priority)
+			session.add(newObj)
+			session.commit()
+			session.close()
+			return jsonify(results = "1")
+
+		elif type(idf) == type("") :
 		  	return jsonify(results = 0)
 
 	query = session.query(Object)
