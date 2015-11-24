@@ -5,6 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Unicode, String
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
+import json
 
 Base = declarative_base()
 
@@ -36,7 +37,6 @@ class Object(Base):
   obj_desc = Column(String(40))
   obj_priority = Column(Integer(2))
   d_ob = relationship("Dept_obj", backref="object")
-
 
 engine = create_engine("mysql://root:wjdtnsgud1!@localhost/isp", encoding='utf8', echo=True)
 Base.metadata.create_all(engine)

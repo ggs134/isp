@@ -3,13 +3,14 @@
 # all the import
 from sqlalchemy import create_engine, desc, asc, func
 from sqlalchemy.orm import sessionmaker, scoped_session
-
-# DB fils import 
-from isp_final import Department, Dept_obj, Object
-
 from flask import Flask, request, redirect, url_for, abort, render_template, flash, jsonify
 from flask import session as login_session
+from json import dumps, loads
+from sqlalchemy.ext.declarative import declarative_base
 import sys
+
+# DB fils import 
+from isp_final import Base, Department, Dept_obj, Object
 
 #configuration
 # DEBUG = True
@@ -24,19 +25,134 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 #Connect to Database and create database session
-engine = create_engine("mysql://root:wjdtnsgud1!@localhodst/isp", encoding='utf8', echo=False)
+engine = create_engine("mysql://root:wjdtnsgud1!@localhost/isp", encoding='utf8', echo=False)
 Base.metadata.bind = engine
 DBSession=scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 session = DBSession()
 
-#main page
+#deportment
 @app.route('/')
-def show_entries():
+def show_deportment():
 	# entries=session.query(Entries).order_by(desc(Entries.id)).all()
 	# session.close()
 	return jsonify(greeting= 'Hello ISP!')
  
-# #board1 page
+#Deportment
+@app.route('/department')
+def show_department():
+	query = session.query(Department)
+	query_list =  query.all()
+	converted_list = []
+	for i in query_list:
+		individual_object = i.__dict__.copy()
+		del individual_object['_sa_instance_state']
+		converted_list.append(individual_object)
+	return jsonify(results = converted_list)
+
+#Object Read
+@app.route('/object', methods=['GET','POST'])
+def show_object():
+
+	if request.method == "POST":
+	 	#Get Request
+	 	data = request.get_json(force=True)
+	 	#get data from requested
+	 	idf = data['a'].encode('utf-8')
+	 	obj_code = data['obj_code'].encode('utf-8')
+	 	# obj_desc = data['obj_desc'].encode('utf-8')
+	 	# obj_priority = data['obj_priority'].encode('utf-8')
+	 	obj_desc = None
+	 	obj_priority = None
+
+		if idf == 'ShowObject':
+		  	query = session.query(Object)
+		  	#Select * from where obj_code == obj_code or obj_desc == %obj_desc% or obj_priority == obj_priority
+		  	# query_list = query.filter(Object.obj_code == obj_code, Object.obj_desc.like("%"+obj_desc+"%"), Object.obj_priority == obj_priority).all()
+
+		  	#This is needs to be converted complex 'where' condition.
+		  	# query_list = query.filter("obj_code =:obj_code").params(obj_code=obj_code).all()
+		  	query_list = query.from_statement("select * from object where obj_code=:obj_code OR obj_desc=:obj_desc").params(obj_code=obj_code, obj_desc=obj_desc)
+		  	# query_list = query.filter(Object.obj_code=obj_code).all()
+		  	
+		  	#Check if there a queried list exists
+		  	if query_list is not None:
+		  		converted_list = []
+		  		for i in query_list:
+		  			individual_object = i.__dict__.copy()
+		  			del individual_object['_sa_instance_state']
+		  			converted_list.append(individual_object)
+		  		session.close()
+		  		return jsonify(results = converted_list)
+		  	else:
+		  		return jsonify(results = 0)		
+		elif type(obj_code) == type("") :
+		  	return jsonify(results = 0)
+
+	query = session.query(Object)
+	query_list = query.all()
+	converted_list = []
+	for i in query_list:
+		individual_object = i.__dict__.copy()
+		del individual_object['_sa_instance_state']
+		converted_list.append(individual_object)
+	session.close()
+	return jsonify(results = converted_list)
+
+#Object Create
+@app.route('/object/add', methods=['POST'])
+def add_object():
+	#get data
+	json_object = request.get_json()
+	#parse into variable
+	code = json_object['obj_code'].encode('utf-8')
+	desc = json_object['obj_desc'].encode('utf-8')
+	priority = json_object['obj_priority'].encode('utf-8')
+	#create object
+	new_object = Object(obj_code = code, obj_desc = desc, obj_priority = priority)
+	session.add(new_object)
+	session.commit()
+ 	session.close()
+ 	return jsonify(results = 1)
+
+#Object Update
+@app.route('/object/update', methods=['POST'])
+def update_object():
+	#get data
+	json_object = request.get_json()
+	#parse into variable
+	code = json_object['obj_code'].encode('utf-8')
+	desc = json_object['obj_desc'].encode('utf-8')
+	priority = json_object['obj_priority'].encode('utf-8')
+	#create object
+	session.query(Object).filter(Object.obj_code == code).update({'obj_desc':desc, 'obj_priority':priority})
+	session.close()
+	return jsonify(results = 1)
+
+#Object Delete
+@app.route('/object/delete', methods=['POST'])
+def delete_object():
+	#get data
+	json_object = request.get_json()
+	#parse into variable
+	code = json_object['obj_code'].encode('utf-8')
+	#delete object
+	session.query(Object).filter(Object.obj_code == code).delete()
+	session.close()
+	return jsonify(results = 1)
+
+#Department-Object
+@app.route('/dept-obj')
+def show_DeptObj():
+	query = session.query(Dept_obj)
+	query_list =  query.all()
+	converted_list = []
+	for i in query_list:
+		individual_object = i.__dict__.copy()
+		del individual_object['_sa_instance_state']
+		converted_list.append(individual_object)
+	return jsonify(results = converted_list)
+
+
 # @app.route('/board1/<int:page_number>')
 # def board1(page_number):
 # 	#총 글의 갯수를 구함
@@ -131,3 +247,4 @@ def show_entries():
 
 if __name__=='__main__':
 	app.run(host='0.0.0.0')
+	app.debug=True
