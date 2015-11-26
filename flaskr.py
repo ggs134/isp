@@ -137,9 +137,8 @@ def show_object():
 		if idf == 'DeleteObject':
 		  	query = session.query(Object)
 		  	query_row = query.from_statement("select * from object where obj_code=:obj_code OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_priority=obj_priority).like('%'+obj_desc+'%').first()
-			updated_row = query_row.add(obj_code = obj_code, obj_desc = obj_desc, obj_priority = obj_priority)
 			sess = Session()
-			sess.add(updated_row)
+			sess.delete(query_row)
 			session.commit()
 			session.close()
 			return jsonify(results = "1")
