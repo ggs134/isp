@@ -24,30 +24,33 @@ app.config.from_object(__name__)
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+
+#wjdtnsgud1!
 #Connect to Database and create database session
 engine = create_engine("mysql://root:wjdtnsgud1!@localhost/isp", encoding='utf8', echo=False)
 Base.metadata.bind = engine
 DBSession=scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 session = DBSession()
 
-#deportment
-@app.route('/')
-def show_deportment():
-	# entries=session.query(Entries).order_by(desc(Entries.id)).all()
-	# session.close()
-	return jsonify(greeting= 'Hello ISP!')
 
-#Deportment
-@app.route('/department')
-def show_department():
-	query = session.query(Department)
-	query_list =  query.all()
-	converted_list = []
-	for i in query_list:
-		individual_object = i.__dict__.copy()
-		del individual_object['_sa_instance_state']
-		converted_list.append(individual_object)
-	return jsonify(results = converted_list)
+######deportment
+# @app.route('/')
+# def show_deportment():
+# 	# entries=session.query(Entries).order_by(desc(Entries.id)).all()
+# 	# session.close()
+# 	return jsonify(greeting= 'Hello ISP!')
+######Deportment
+# @app.route('/department')
+# def show_department():
+# 	query = session.query(Department)
+# 	query_list =  query.all()
+# 	converted_list = []
+# 	for i in query_list:
+# 		individual_object = i.__dict__.copy()
+# 		del individual_object['_sa_instance_state']
+# 		converted_list.append(individual_object)
+# 	return jsonify(results = converted_list)
+
 
 #Object Read
 @app.route('/object', methods=['GET','POST','PUT','DELETE'])
@@ -56,25 +59,25 @@ def show_object():
 	if request.method == "POST":
 	 	#Get Request
 	 	data = request.get_json(force=True)
+		#the request object already has a method get_json which can give you the json regardless of the content-type if you execute it with force=True
 	 	#get data from requested
 	 	idf = data['a'].encode('utf-8')
 	 	obj_code = data['obj_code'].encode('utf-8')
-	 	# obj_desc = data['obj_desc'].encode('utf-8')
-	 	# obj_priority = data['obj_priority'].encode('utf-8')
 	 	obj_desc = data['obj_desc'].encode('utf-8')
 	 	obj_priority = data['obj_priority'].encode('utf-8')
 
 		if idf == 'ShowObject':
 		  	query = session.query(Object)
-			#session = stream의 일종
-			#sqlalchemy의 Object클레스
+		#session = stream의 일종
+		#sqlalchemy의 Object클레스
 		  	#Select * from where obj_code == obj_code or obj_desc == %obj_desc% or obj_priority == obj_priority
 		  	# query_list = query.filter(Object.obj_code == obj_code, Object.obj_desc.like("%"+obj_desc+"%"), Object.obj_priority == obj_priority).all()
 
 		  	#This is needs to be converted complex 'where' condition.
 		  	# query_list = query.filter("obj_code =:obj_code").params(obj_code=obj_code).all()
-		  	query_list = query.from_statement("select * from object where obj_code=:obj_code OR obj_desc=:obj_desc OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_desc=obj_desc, obj_priority=obj_priority).all()
-			#>>>>>>>>>> obj_desc의 쿼리 일부분만 검색, 일부 내용 검색 해도 가능하도록 정규표현식화?, sql, sqlalchemy에서 검색
+		  	query_list = query.from_statement("select * from object where obj_code=:obj_code OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_priority=obj_priority).like('%'+obj_desc+'%').all()
+			#query_list = query.filter("obj_code=:obj_code OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_priority=obj_priority).filter(Object.obj_desc.like(''%'+obj_desc+'%').all()
+			#obj_desc=obj_desc의 쿼리 일부분만 검색, 일부 내용 검색 해도 가능하도록 정규표현식화, sql, sqlalchemy에서 검색, like는 factory pattern
 
 			# query_list = query.filter(Object.obj_code=obj_code).all()
 
@@ -89,6 +92,7 @@ def show_object():
 		  		return jsonify(results = converted_list)
 		  	else:
 		  		return jsonify(results = "0")
+
 		elif idf == 'CreateObject':
 			newObj=Object(obj_code = obj_code, obj_desc = obj_desc, obj_priority = obj_priority)
 			session.add(newObj)
@@ -97,8 +101,54 @@ def show_object():
 			return jsonify(results = "1")
 
 		elif type(idf) == type("") :
-		  	return jsonify(results = 0)
+		  	return jsonify(results = "0")
 
+
+	elif request.method == "PUT":
+	 	#Get Request
+	 	data = request.get_json(force=True)
+	 	#get data from requested
+	 	idf = data['a'].encode('utf-8')
+	 	obj_code = data['obj_code'].encode('utf-8')
+	 	obj_desc = data['obj_desc'].encode('utf-8')
+	 	obj_priority = data['obj_priority'].encode('utf-8')
+
+		if idf == 'UpdateObject':
+		  	query = session.query(Object)
+		  	query_row = query.from_statement("select * from object where obj_code=:obj_code OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_priority=obj_priority).like('%'+obj_desc+'%').first()
+			updated_row = query_row.add(obj_code = obj_code, obj_desc = obj_desc, obj_priority = obj_priority)
+			sess = Session()
+			sess.add(updated_row)
+			session.commit()
+			session.close()
+			return jsonify(results = "1")
+
+
+
+	elif request.method == "DELETE":
+	 	#Get Request
+	 	data = request.get_json(force=True)
+	 	#get data from requested
+	 	idf = data['a'].encode('utf-8')
+	 	obj_code = data['obj_code'].encode('utf-8')
+	 	obj_desc = data['obj_desc'].encode('utf-8')
+	 	obj_priority = data['obj_priority'].encode('utf-8')
+
+		if idf == 'DeleteObject':
+		  	query = session.query(Object)
+		  	query_row = query.from_statement("select * from object where obj_code=:obj_code OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_priority=obj_priority).like('%'+obj_desc+'%').first()
+			updated_row = query_row.add(obj_code = obj_code, obj_desc = obj_desc, obj_priority = obj_priority)
+			sess = Session()
+			sess.add(updated_row)
+			session.commit()
+			session.close()
+			return jsonify(results = "1")
+
+
+
+
+
+	#GET방식
 	query = session.query(Object)
 	query_list = query.all()
 	converted_list = []
@@ -108,6 +158,7 @@ def show_object():
 		converted_list.append(individual_object)
 	session.close()
 	return jsonify(results = converted_list)
+
 
 #Object Create
 @app.route('/object/add', methods=['POST'])
