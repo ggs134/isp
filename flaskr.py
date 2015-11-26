@@ -111,7 +111,7 @@ def show_object():
 	 	idf = data['a'].encode('utf-8')
 	 	obj_code = data['obj_code'].encode('utf-8')
 	 	obj_desc = data['obj_desc'].encode('utf-8')
-	 	obj_priority = data['obj_priority'].encode('utf-8')
+	 	obj_priority = data['obj_priority']
 
 		if idf == 'UpdateObject':
 			#데이터베이스에서 업데이트 하고자 하는 객체를 불러옴
@@ -135,12 +135,10 @@ def show_object():
 	 	#get data from requested
 	 	idf = data['a'].encode('utf-8')
 	 	obj_code = data['obj_code'].encode('utf-8')
-	 	obj_desc = data['obj_desc'].encode('utf-8')
-	 	obj_priority = data['obj_priority'].encode('utf-8')
 
 		if idf == 'DeleteObject':
 		  	query = session.query(Object)
-		  	query_row = query.from_statement("select * from object where obj_code=:obj_code").params(obj_code=obj_code).first()
+		  	deleted_row = query.from_statement("select * from object where obj_code=:obj_code").params(obj_code=obj_code).first()
 			session.delete(deleted_row)
 			session.commit()
 			session.close()
@@ -307,5 +305,5 @@ def show_DeptObj():
 # 	DBSession.remove()
 
 if __name__=='__main__':
-	app.run(host='0.0.0.0')
+	app.run(host='0.0.0.0', debug=True)
 	app.debug=True
