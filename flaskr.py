@@ -114,15 +114,19 @@ def show_object():
 	 	obj_priority = data['obj_priority'].encode('utf-8')
 
 		if idf == 'UpdateObject':
-		  	query = session.query(Object)
-		  	query_row = query.from_statement("select * from object where obj_code=:obj_code OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_priority=obj_priority).like('%'+obj_desc+'%').first()
-			updated_row = query_row.add(obj_code = obj_code, obj_desc = obj_desc, obj_priority = obj_priority)
-			sess = Session()
-			sess.add(updated_row)
+			#데이터베이스에서 업데이트 하고자 하는 객체를 불러옴
+			query = session.query(Object)
+		  	query_row = query.from_statement("select * from object where obj_code=:obj_code").params(obj_code=obj_code).first()
+			#만약 객체가 조회되지 않을 경우 0을 반환
+			if query_row is None :
+				return jsonify(results = "0")
+			#조회된 객체안에 컬럼에 접근하여 사용자가 요청한 데이터를 입력해줌
+			query_row.obj_desc = obj_desc
+			query_row.obj_priority = obj_priority
+			#세션 커밋 믿 닫음
 			session.commit()
 			session.close()
 			return jsonify(results = "1")
-
 
 
 	elif request.method == "DELETE":
@@ -136,15 +140,11 @@ def show_object():
 
 		if idf == 'DeleteObject':
 		  	query = session.query(Object)
-		  	query_row = query.from_statement("select * from object where obj_code=:obj_code OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_priority=obj_priority).like('%'+obj_desc+'%').first()
-			sess = Session()
-			sess.delete(query_row)
+		  	query_row = query.from_statement("select * from object where obj_code=:obj_code").params(obj_code=obj_code).first()
+			session.delete(deleted_row)
 			session.commit()
 			session.close()
 			return jsonify(results = "1")
-
-
-
 
 
 	#GET방식
