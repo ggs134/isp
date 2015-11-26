@@ -128,6 +128,8 @@ def show_object():
 			session.close()
 			return jsonify(results = "1")
 
+		elif type(idf) == type("") :
+		  	return jsonify(results = "0")
 
 	elif request.method == "DELETE":
 	 	#Get Request
@@ -146,8 +148,10 @@ def show_object():
 			session.close()
 			return jsonify(results = "1")
 
+		elif type(idf) == type("") :
+		  	return jsonify(results = "0")
 
-	#GET방식
+#GET방식
 	query = session.query(Object)
 	query_list = query.all()
 	converted_list = []
