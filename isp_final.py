@@ -2,7 +2,7 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, Unicode, String
+from sqlalchemy import Column, SmallInteger, Unicode, String
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
 import json
@@ -35,7 +35,7 @@ class Object(Base):
   __tablename__ = 'object'
   obj_code = Column(String(3), primary_key=True)
   obj_desc = Column(String(40))
-  obj_priority = Column(Integer(2))
+  obj_priority = Column(SmallInteger)
   d_ob = relationship("Dept_obj", backref="object")
 
 engine = create_engine("mysql://root:wjdtnsgud1!@localhost/isp", encoding='utf8', echo=True)
