@@ -3,7 +3,7 @@
 # all the import
 from sqlalchemy import create_engine, desc, asc, func
 from sqlalchemy.orm import sessionmaker, scoped_session
-from flask import Flask, request, redirect, url_for, abort, render_template, flash, jsonify
+from flask import Flask, request, redirect, url_for, abort, render_template, flash, jsonify, send_file
 from flask import session as login_session
 from json import dumps, loads
 from sqlalchemy.ext.declarative import declarative_base
@@ -51,6 +51,11 @@ session = DBSession()
 # 		converted_list.append(individual_object)
 # 	return jsonify(results = converted_list)
 
+
+#main page
+@app.route('/')
+def main_page():
+	return send_file("public/html/test.html", mimetype='text/html')
 
 #Object Read
 @app.route('/object', methods=['GET','POST','PUT','DELETE'])
