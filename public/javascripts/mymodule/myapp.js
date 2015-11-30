@@ -1,4 +1,9 @@
-var myapp = angular.module("myapp", ["ui.bootstrap"]);
+var myapp = angular.module("myapp", ["ui.bootstrap", "ngResource"]);
+
+function ResourceSetter($resource){
+	this.serverUrl = $resource("http://centurio.iptime.org:444/retrieve_data/test_data");
+}
+
 myapp.controller("hello", ['$scope', function($scope){
 	$scope.helloData = "hello data";
 }]);
@@ -91,7 +96,8 @@ myapp.directive("orgmngInputForm", function(){
 	}
 });
 
-myapp.directive("objmngInputForm", function(){
+myapp.service("resSet", ResourceSetter)
+.directive("objmngInputForm", function(){
 	return {
 		restrict: "EA",
 		templateUrl: "../../html/template/objmng_input_form.html",
@@ -102,7 +108,14 @@ myapp.directive("objmngInputForm", function(){
 			jQuery(".input-form").css({
 				margin: "10px 0px"
 			});
-		}
+		},
+		controller: ['$scope','resSet', function($scope, resSet){
+			$scope.queryData = function(){
+				var result = resSet.serverUrl.get({hello:"hello"}, function(result){
+					alert(result.hello);
+				});
+			}
+		}]
 	}
 });
 
