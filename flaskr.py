@@ -27,7 +27,7 @@ sys.setdefaultencoding('utf-8')
 
 #wjdtnsgud1!
 #Connect to Database and create database session
-engine = create_engine("mysql://root:wjdtnsgud1!@localhost/isp", encoding='utf8', echo=False)
+engine = create_engine("mysql://root:1127@localhost/isp", encoding='utf8', echo=False)
 Base.metadata.bind = engine
 DBSession=scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 session = DBSession()
