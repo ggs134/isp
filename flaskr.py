@@ -55,7 +55,7 @@ session = DBSession()
 #main page
 @app.route('/')
 def main_page():
-	return send_file("public/html/test.html", mimetype='text/html')
+	return send_file("public/html/main.html", mimetype='text/html')
 
 #Object Read
 @app.route('/object', methods=['GET','POST','PUT','DELETE'])
@@ -270,113 +270,140 @@ def show_department():
 	session.close()
 	return jsonify(results = converted_list)
 
-#In Progress
-#Department-Object
-@app.route('/dept-obj')
-def show_DeptObj():
+# DEPT_OBJ
+@app.route('/dept-obj', methods=['GET','POST','PUT','DELETE'])
+def show_deptobj():
 	if request.method == "POST":
 	 	#Get Request
 	 	data = request.get_json(force=True)
-		#the request object already has a method get_json which can give you the json regardless of the content-type if you execute it with force=True
 	 	#get data from requested
 	 	idf = data['a'].encode('utf-8')
-	 	obj_code = data['obj_code'].encode('utf-8')
-	 	obj_desc = data['obj_desc'].encode('utf-8')
-	 	obj_priority = data['obj_priority'].encode('utf-8')
-
-		if idf == 'ShowObject':
-		  	query = session.query(Object)
-		#session = stream의 일종
-		#sqlalchemy의 Object클레스
-		  	#Select * from where obj_code == obj_code or obj_desc == %obj_desc% or obj_priority == obj_priority
-		  	# query_list = query.filter(Object.obj_code == obj_code, Object.obj_desc.like("%"+obj_desc+"%"), Object.obj_priority == obj_priority).all()
-
-		  	#This is needs to be converted complex 'where' condition.
-		  	# query_list = query.filter("obj_code =:obj_code").params(obj_code=obj_code).all()
-		  	query_list = query.from_statement("select * from object where obj_code=:obj_code OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_priority=obj_priority).like('%'+obj_desc+'%').all()
-			#query_list = query.filter("obj_code=:obj_code OR obj_priority=:obj_priority").params(obj_code=obj_code, obj_priority=obj_priority).filter(Object.obj_desc.like(''%'+obj_desc+'%').all()
-			#obj_desc=obj_desc의 쿼리 일부분만 검색, 일부 내용 검색 해도 가능하도록 정규표현식화, sql, sqlalchemy에서 검색, like는 factory pattern
-
-			# query_list = query.filter(Object.obj_code=obj_code).all()
-
-		  	#Check if there a queried list exists
-		  	if query_list is not None:
-		  		converted_list = []
+	 	dept_code = data['dept_code'].encode('utf-8')
+		obj_code = data['obj_code'].encode('utf-8')
+	 	dept_obj_resp = data['dept_obj_resp'].encode('utf-8') #책임여부
+		dept_obj_auth = data['dept_obj_auth'].encode('utf-8') # 권한여부
+		dept_obj_exp = data['dept_obj_exp'].encode('utf-8') # 경험여부
+		dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
+		dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
+	 	
+		if idf == 'ShowDeptObj':
+		  	query = session.query(Dept_obj)
+			query_list = query.from_statement("select * from dept-obj where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).all())
+			if query_list is not None:
+				converted_list = []
 		  		for i in query_list:
-		  			individual_object = i.__dict__.copy()
-		  			del individual_object['_sa_instance_state']
-		  			converted_list.append(individual_object)
+		  			individual_dep-obj = i.__dict__.copy()
+		  			del individual_dep-obj['_sa_instance_state']
+		  			converted_list.append(individual_dep-obj)
 		  		session.close()
 		  		return jsonify(results = converted_list)
 		  	else:
 		  		return jsonify(results = "0")
-
-		elif idf == 'CreateObject':
-			newObj=Object(obj_code = obj_code, obj_desc = obj_desc, obj_priority = obj_priority)
-			session.add(newObj)
+		elif idf == 'CreateDeptObj':
+			newDept_obj=Dept_obj(dept_code = dept_code, obj_code = obj_code, dept_obj_resp =dept_obj_resp ,dept_obj_auth = dept_obj_auth,dept_obj_exp=dept_obj_exp ,dept_obj_work=dept_obj_work ,dept_obj_ref=dept_obj_ref).first())
+			session.add(newDept_obj)
 			session.commit()
 			session.close()
 			return jsonify(results = "1")
 
 		elif type(idf) == type("") :
-		  	return jsonify(results = "0")
+		  	return jsonify(results = 0)
+		
+		
+	elif request.method == "POST":
+	 	#Get Request
+	 	data = request.get_json(force=True)
+	 	#get data from requested
+	 	idf = data['a'].encode('utf-8')
+	 	dept_code = data['dept_code'].encode('utf-8')
+		obj_code = data['obj_code'].encode('utf-8')
+	 	dept_obj_resp = data['dept_obj_resp'].encode('utf-8') #책임여부
+		dept_obj_auth = data['dept_obj_auth'].encode('utf-8') # 권한여부
+		dept_obj_exp = data['dept_obj_exp'].encode('utf-8') # 경험여부
+		dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
+		dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
 
+		if idf == 'InsertDeptObj':
+			query = session.query(Dept_obj)
+			query_list = query.from_statement("Insert into table Dept_obj values('dept_code=:dept_code','obj_code=:obj_code','dept_obj_resp=:dept_obj_resp','dept_obj_auth=:dept_obj_auth','dept_obj_exp=:dept_obj_exp','dept_obj_work=:dept_obj_work','dept_obj_ref=:dept_obj_ref')").params(dept_code=:dept_code,obj_code=obj_code,dept_obj_resp=dept_obj_resp,dept_obj_auth=dept_obj_auth,dept_obj_exp=dept_obj_exp,dept_obj_work=dept_obj_work,dept_obj_ref=dept_obj_ref)
+			
+			if query_list in None:
+				return jsonify(results="0")
+			query_list.dept_code = dept_code
+			query_list.obj_code = obj_code
+			query_list.dept_obj_resp = dept_obj_resp
+			query_list.dept_obj_auth = dept_obj_auth
+			query_list.dept_obj_exp = dept_obj_exp
+			query_list.dept_obj_work = dept_obj_work
+			query_list.dept_obj_ref = dept_obj_ref
+			# 세션 커밋
+			session.commit()
+			session.close()
+			return jsonify(results = "1")
 
 	elif request.method == "PUT":
-	 	#Get Request
+		#Get Request
 	 	data = request.get_json(force=True)
 	 	#get data from requested
 	 	idf = data['a'].encode('utf-8')
-	 	obj_code = data['obj_code'].encode('utf-8')
-	 	obj_desc = data['obj_desc'].encode('utf-8')
-	 	obj_priority = data['obj_priority']
+	 	dept_code = data['dept_code'].encode('utf-8')
+		obj_code = data['obj_code'].encode('utf-8')
+	 	dept_obj_resp = data['dept_obj_resp'].encode('utf-8') #책임여부
+		dept_obj_auth = data['dept_obj_auth'].encode('utf-8') # 권한여부
+		dept_obj_exp = data['dept_obj_exp'].encode('utf-8') # 경험여부
+		dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
+		dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
 
-		if idf == 'UpdateObject':
-			#데이터베이스에서 업데이트 하고자 하는 객체를 불러옴
-			query = session.query(Object)
-		  	query_row = query.from_statement("select * from object where obj_code=:obj_code").params(obj_code=obj_code).first()
-			#만약 객체가 조회되지 않을 경우 0을 반환
-			if query_row is None :
-				return jsonify(results = "0")
-			#조회된 객체안에 컬럼에 접근하여 사용자가 요청한 데이터를 입력해줌
-			query_row.obj_desc = obj_desc
-			query_row.obj_priority = obj_priority
-			#세션 커밋 믿 닫음
+		if idf=='UpdateDeptObj':
+			query = session.query(Dept_obj)
+			query_list = query.from_statement("Select * from Dept_obj where where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first())
+			
+			if quert_list in Node:
+				return jsonify(results="0")
+			query_list.dept_code = dept_code
+			query_list.obj_code = obj_code
+			query_list.dept_obj_resp = dept_obj_resp
+			query_list.dept_obj_auth = dept_obj_auth
+			query_list.dept_obj_exp = dept_obj_exp
+			query_list.dept_obj_work = dept_obj_work
+			query_list.dept_obj_ref = dept_obj_ref
 			session.commit()
 			session.close()
-			return jsonify(results = "1")
-
-		elif type(idf) == type("") :
-		  	return jsonify(results = "0")
-
-	elif request.method == "DELETE":
-	 	#Get Request
+			return jsonify(results ="1")
+	
+	elif request.method =="DELETE":
+		#Get Request
 	 	data = request.get_json(force=True)
 	 	#get data from requested
 	 	idf = data['a'].encode('utf-8')
-	 	obj_code = data['obj_code'].encode('utf-8')
+	 	dept_code = data['dept_code'].encode('utf-8')
+		obj_code = data['obj_code'].encode('utf-8')
+	 	dept_obj_resp = data['dept_obj_resp'].encode('utf-8') #책임여부
+		dept_obj_auth = data['dept_obj_auth'].encode('utf-8') # 권한여부
+		dept_obj_exp = data['dept_obj_exp'].encode('utf-8') # 경험여부
+		dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
+		dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
 
-		if idf == 'DeleteObject':
-		  	query = session.query(Object)
-		  	deleted_row = query.from_statement("select * from object where obj_code=:obj_code").params(obj_code=obj_code).first()
-			session.delete(deleted_row)
+		if idf=='UpdateDeptObj':
+			query = session.query(Dept_obj)
+			query_list = query.from_statement("Select * from Dept_obj where where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first())
+			if quert_list in Node:
+				return jsonify(results="0")
+			session.delete(query_list)
 			session.commit()
 			session.close()
-			return jsonify(results = "1")
-
-		elif type(idf) == type("") :
-		  	return jsonify(results = "0")
-
-#GET방식
-	query = session.query(Object)
+			return jsonify(results="1")
+	
+	query = session.query(Dept_obj)
 	query_list = query.all()
 	converted_list = []
 	for i in query_list:
-		individual_object = i.__dict__.copy()
-		del individual_object['_sa_instance_state']
-		converted_list.append(individual_object)
+		individual_DeptObj = i.__dict__.copy()
+		del individual_DeptObj['_sa_instance_state']
+		converted_list.append(individual_DeptObj)
 	session.close()
 	return jsonify(results = converted_list)
+
 
 
 # @app.route('/board1/<int:page_number>')
