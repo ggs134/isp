@@ -227,8 +227,9 @@ def show_department():
 	# 		session.close()
 	# 		return jsonify(results = "1")
 
+
 	# 삭제 수행
-	elif request.method== 'PUT' : ##
+	elif request.method== 'PUT' :
 		data = request.get_json(force=True)
 		idf = data['a'].encode('utf-8')
 		dept_code = data['dept_code'].encode('utf-8')
@@ -280,15 +281,17 @@ def show_deptobj():
 	 	idf = data['a'].encode('utf-8')
 	 	dept_code = data['dept_code'].encode('utf-8')
 		obj_code = data['obj_code'].encode('utf-8')
+
+############문제해결 // org = {'a': 'ShowDeptObj', 'dept_code':'2', 'obj_code':'2', 'dept_obj_resp':'0', 'dept_obj_auth':'0', 'dept_obj_exp':'1','dept_obj_work':'1','dept_obj_ref':'0'}
 	 	dept_obj_resp = data['dept_obj_resp'].encode('utf-8') #책임여부
-		dept_obj_auth = data['dept_obj_auth'].encode('utf-8') # 권한여부
-		dept_obj_exp = data['dept_obj_exp'].encode('utf-8') # 경험여부
-		dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
+		dept_obj_auth = data['dept_obj_auth'].encode('utf-8') #권한여부
+		dept_obj_exp = data['dept_obj_exp'].encode('utf-8') #경험여부
+		dept_obj_work = data['dept_obj_work'].encode('utf-8') #작업여부
 		dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
 
 		if idf == 'ShowDeptObj':
 		  	query = session.query(Dept_obj)
-			query_list = query.from_statement("select * from dept-obj where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).all()
+			query_list = query.from_statement("select * from dept_obj where dept_code=:dept_code AND obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).all()
 			if query_list is not None:
 				converted_list = []
 		  		for i in query_list:
@@ -300,7 +303,7 @@ def show_deptobj():
 		  	else:
 		  		return jsonify(results = "0")
 		elif idf == 'CreateDeptObj':
-			newDept_obj=Dept_obj(dept_code = dept_code, obj_code = obj_code, dept_obj_resp =dept_obj_resp ,dept_obj_auth = dept_obj_auth,dept_obj_exp=dept_obj_exp ,dept_obj_work=dept_obj_work ,dept_obj_ref=dept_obj_ref).first()
+			newDept_obj = Dept_obj(dept_code = dept_code, obj_code = obj_code, dept_obj_resp =dept_obj_resp ,dept_obj_auth = dept_obj_auth,dept_obj_exp=dept_obj_exp ,dept_obj_work=dept_obj_work ,dept_obj_ref=dept_obj_ref)
 			session.add(newDept_obj)
 			session.commit()
 			session.close()
@@ -309,40 +312,40 @@ def show_deptobj():
 		elif type(idf) == type("") :
 		  	return jsonify(results = 0)
 
-
-	elif request.method == "POST":
-	 	#Get Request
-	 	data = request.get_json(force=True)
-	 	#get data from requested
-	 	idf = data['a'].encode('utf-8')
-	 	dept_code = data['dept_code'].encode('utf-8')
-		obj_code = data['obj_code'].encode('utf-8')
-	 	dept_obj_resp = data['dept_obj_resp'].encode('utf-8') #책임여부
-		dept_obj_auth = data['dept_obj_auth'].encode('utf-8') # 권한여부
-		dept_obj_exp = data['dept_obj_exp'].encode('utf-8') # 경험여부
-		dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
-		dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
-
-		if idf == 'CreateDeptObj':
-			insertObj = object(dept_code=dept_code,obj_code=obj_code,dept_obj_resp=dept_obj_resp,dept_obj_auth=dept_obj_auth,dept_obj_exp=dept_obj_exp,dept_obj_work=dept_obj_work,dept_obj_ref=dept_obj_ref)
-			session.add(insertObj)
-			session.commit()
-			session.close()
-			return jasonify(results="1")
-
-			if query_list in None:
-				return jsonify(results="0")
-			query_list.dept_code = dept_code
-			query_list.obj_code = obj_code
-			query_list.dept_obj_resp = dept_obj_resp
-			query_list.dept_obj_auth = dept_obj_auth
-			query_list.dept_obj_exp = dept_obj_exp
-			query_list.dept_obj_work = dept_obj_work
-			query_list.dept_obj_ref = dept_obj_ref
-			# 세션 커밋
-			session.commit()
-			session.close()
-			return jsonify(results = "1")
+	 #중복된 코드임
+	# elif request.method == "POST":
+	#  	#Get Request
+	#  	data = request.get_json(force=True)
+	#  	#get data from requested
+	#  	idf = data['a'].encode('utf-8')
+	#  	dept_code = data['dept_code'].encode('utf-8')
+	# 	obj_code = data['obj_code'].encode('utf-8')
+	#  	dept_obj_resp = data['dept_obj_resp'].encode('utf-8') #책임여부
+	# 	dept_obj_auth = data['dept_obj_auth'].encode('utf-8') # 권한여부
+	# 	dept_obj_exp = data['dept_obj_exp'].encode('utf-8') # 경험여부
+	# 	dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
+	# 	dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
+	#
+	# 	if idf == 'CreateDeptObj':
+	# 		insertObj = object(dept_code=dept_code,obj_code=obj_code,dept_obj_resp=dept_obj_resp,dept_obj_auth=dept_obj_auth,dept_obj_exp=dept_obj_exp,dept_obj_work=dept_obj_work,dept_obj_ref=dept_obj_ref)
+	# 		session.add(insertObj)
+	# 		session.commit()
+	# 		session.close()
+	# 		return jasonify(results="1")
+	#
+	# 		if query_list in None:
+	# 			return jsonify(results="0")
+	# 		query_list.dept_code = dept_code
+	# 		query_list.obj_code = obj_code
+	# 		query_list.dept_obj_resp = dept_obj_resp
+	# 		query_list.dept_obj_auth = dept_obj_auth
+	# 		query_list.dept_obj_exp = dept_obj_exp
+	# 		query_list.dept_obj_work = dept_obj_work
+	# 		query_list.dept_obj_ref = dept_obj_ref
+	# 		# 세션 커밋
+	# 		session.commit()
+	# 		session.close()
+	# 		return jsonify(results = "1")
 
 	elif request.method == "PUT":
 		#Get Request
@@ -359,10 +362,11 @@ def show_deptobj():
 
 		if idf=='UpdateDeptObj':
 			query = session.query(Dept_obj)
-			query_list = query.from_statement("Select * from Dept_obj where where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first()
+			query_list = query.from_stateㄴment("SELECT * FROM dept_obj WHERE dept_code=:dept_code AND obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first()
 
-			if quert_list in Node:
+			if query_list is None:
 				return jsonify(results="0")
+############문제해결 org = {'a': 'UpdateDeptObj', 'dept_code':'2', 'obj_code':'2', 'dept_obj_resp':'0', 'dept_obj_auth':'0', 'dept_obj_exp':'1','dept_obj_work':'1','dept_obj_ref':'0'}
 			query_list.dept_code = dept_code
 			query_list.obj_code = obj_code
 			query_list.dept_obj_resp = dept_obj_resp
