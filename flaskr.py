@@ -181,7 +181,7 @@ def show_department():
 	 		dept_code = None
 	 	if dept_desc is None:
 	 		dept_desc = None
-	 	
+
 		if idf == 'ShowDepartment':
 		  	query = session.query(Department)
 			query_list = query.from_statement("select * from department where dept_code=:dept_code OR dept_desc=:dept_desc").params(dept_code=dept_code, dept_desc=dept_desc).all()
@@ -205,7 +205,7 @@ def show_department():
 		elif type(idf) == type("") :
 		  	return jsonify(results = 0)
 
-	
+
 	###
 	# elif request.method==['POST']:
 	# 	#Get Request
@@ -236,7 +236,7 @@ def show_department():
 
 		if idf =='UpdateDepartment':
 			query = session.query(Department)
-			query_updated = query.from_statement("select * from department where dept_code=:dept_code").params(dept_code=dept_code).first() ##	
+			query_updated = query.from_statement("select * from department where dept_code=:dept_code").params(dept_code=dept_code).first() ##
 			if query_updated is None:
 				return jsonify(results="0")
 			query_updated.dept_code = dept_code
@@ -259,7 +259,7 @@ def show_department():
 			session.commit()
 			session.close()
 			return jsonify(results = "1")
-	
+
 	query = session.query(Department)
 	query_list = query.all()
 	converted_list = []
@@ -285,22 +285,22 @@ def show_deptobj():
 		dept_obj_exp = data['dept_obj_exp'].encode('utf-8') # 경험여부
 		dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
 		dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
-	 	
+
 		if idf == 'ShowDeptObj':
 		  	query = session.query(Dept_obj)
-			query_list = query.from_statement("select * from dept-obj where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).all())
+			query_list = query.from_statement("select * from dept-obj where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).all()
 			if query_list is not None:
 				converted_list = []
 		  		for i in query_list:
-		  			individual_dep-obj = i.__dict__.copy()
-		  			del individual_dep-obj['_sa_instance_state']
-		  			converted_list.append(individual_dep-obj)
+		  			individual_dep_obj = i.__dict__.copy()
+		  			del individual_dep_obj['_sa_instance_state']
+		  			converted_list.append(individual_dep_obj)
 		  		session.close()
 		  		return jsonify(results = converted_list)
 		  	else:
 		  		return jsonify(results = "0")
 		elif idf == 'CreateDeptObj':
-			newDept_obj=Dept_obj(dept_code = dept_code, obj_code = obj_code, dept_obj_resp =dept_obj_resp ,dept_obj_auth = dept_obj_auth,dept_obj_exp=dept_obj_exp ,dept_obj_work=dept_obj_work ,dept_obj_ref=dept_obj_ref).first())
+			newDept_obj=Dept_obj(dept_code = dept_code, obj_code = obj_code, dept_obj_resp =dept_obj_resp ,dept_obj_auth = dept_obj_auth,dept_obj_exp=dept_obj_exp ,dept_obj_work=dept_obj_work ,dept_obj_ref=dept_obj_ref).first()
 			session.add(newDept_obj)
 			session.commit()
 			session.close()
@@ -308,8 +308,8 @@ def show_deptobj():
 
 		elif type(idf) == type("") :
 		  	return jsonify(results = 0)
-		
-		
+
+
 	elif request.method == "POST":
 	 	#Get Request
 	 	data = request.get_json(force=True)
@@ -323,10 +323,13 @@ def show_deptobj():
 		dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
 		dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
 
-		if idf == 'InsertDeptObj':
-			query = session.query(Dept_obj)
-			query_list = query.from_statement("Insert into table Dept_obj values('dept_code=:dept_code','obj_code=:obj_code','dept_obj_resp=:dept_obj_resp','dept_obj_auth=:dept_obj_auth','dept_obj_exp=:dept_obj_exp','dept_obj_work=:dept_obj_work','dept_obj_ref=:dept_obj_ref')").params(dept_code=:dept_code,obj_code=obj_code,dept_obj_resp=dept_obj_resp,dept_obj_auth=dept_obj_auth,dept_obj_exp=dept_obj_exp,dept_obj_work=dept_obj_work,dept_obj_ref=dept_obj_ref)
-			
+		if idf == 'CreateDeptObj':
+			insertObj = object(dept_code=dept_code,obj_code=obj_code,dept_obj_resp=dept_obj_resp,dept_obj_auth=dept_obj_auth,dept_obj_exp=dept_obj_exp,dept_obj_work=dept_obj_work,dept_obj_ref=dept_obj_ref)
+			session.add(insertObj)
+			session.commit()
+			session.close()
+			return jasonify(results="1")
+
 			if query_list in None:
 				return jsonify(results="0")
 			query_list.dept_code = dept_code
@@ -356,8 +359,8 @@ def show_deptobj():
 
 		if idf=='UpdateDeptObj':
 			query = session.query(Dept_obj)
-			query_list = query.from_statement("Select * from Dept_obj where where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first())
-			
+			query_list = query.from_statement("Select * from Dept_obj where where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first()
+
 			if quert_list in Node:
 				return jsonify(results="0")
 			query_list.dept_code = dept_code
@@ -370,7 +373,7 @@ def show_deptobj():
 			session.commit()
 			session.close()
 			return jsonify(results ="1")
-	
+
 	elif request.method =="DELETE":
 		#Get Request
 	 	data = request.get_json(force=True)
@@ -386,14 +389,14 @@ def show_deptobj():
 
 		if idf=='UpdateDeptObj':
 			query = session.query(Dept_obj)
-			query_list = query.from_statement("Select * from Dept_obj where where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first())
+			query_list = query.from_statement("Select * from Dept_obj where where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first()
 			if quert_list in Node:
 				return jsonify(results="0")
 			session.delete(query_list)
 			session.commit()
 			session.close()
 			return jsonify(results="1")
-	
+
 	query = session.query(Dept_obj)
 	query_list = query.all()
 	converted_list = []
