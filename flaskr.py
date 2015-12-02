@@ -27,7 +27,7 @@ sys.setdefaultencoding('utf-8')
 
 #wjdtnsgud1!
 #Connect to Database and create database session
-engine = create_engine("mysql://root:1127@localhost/isp", encoding='utf8', echo=False)
+engine = create_engine("mysql://root:wjdtnsgud1!@localhost/isp", encoding='utf8', echo=False)
 Base.metadata.bind = engine
 DBSession=scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 session = DBSession()
@@ -362,7 +362,7 @@ def show_deptobj():
 
 		if idf=='UpdateDeptObj':
 			query = session.query(Dept_obj)
-			query_list = query.from_stateㄴment("SELECT * FROM dept_obj WHERE dept_code=:dept_code AND obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first()
+			query_list = query.from_statement("SELECT * FROM dept_obj WHERE dept_code=:dept_code AND obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first()
 
 			if query_list is None:
 				return jsonify(results="0")

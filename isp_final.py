@@ -38,5 +38,5 @@ class Object(Base):
   obj_priority = Column(SmallInteger)
   d_ob = relationship("Dept_obj", backref="object")
 
-engine = create_engine("mysql://root:1127@localhost/isp", encoding='utf8', echo=True)
+engine = create_engine("mysql://root:wjdtnsgud1!@localhost/isp", encoding='utf8', echo=True)
 Base.metadata.create_all(engine)
