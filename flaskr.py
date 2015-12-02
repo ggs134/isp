@@ -385,21 +385,22 @@ def show_deptobj():
 	 	idf = data['a'].encode('utf-8')
 	 	dept_code = data['dept_code'].encode('utf-8')
 		obj_code = data['obj_code'].encode('utf-8')
-	 	dept_obj_resp = data['dept_obj_resp'].encode('utf-8') #책임여부
-		dept_obj_auth = data['dept_obj_auth'].encode('utf-8') # 권한여부
-		dept_obj_exp = data['dept_obj_exp'].encode('utf-8') # 경험여부
-		dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
-		dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
+		# dept_obj_resp = data['dept_obj_resp'].encode('utf-8') #책임여부
+		# dept_obj_auth = data['dept_obj_auth'].encode('utf-8') # 권한여부
+		# dept_obj_exp = data['dept_obj_exp'].encode('utf-8') # 경험여부
+		# dept_obj_work = data['dept_obj_work'].encode('utf-8') # 작업여부
+		# dept_obj_ref = data['dept_obj_ref'].encode('utf-8') #참조여부
 
-		if idf=='UpdateDeptObj':
+		if idf=='DeleteDeptObj':  # 키값 = a
 			query = session.query(Dept_obj)
-			query_list = query.from_statement("Select * from Dept_obj where where dept_code=:dept_code OR obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first()
-			if quert_list in Node:
+			query_list = query.from_statement("SELECT * FROM dept_obj WHERE dept_code=:dept_code AND obj_code=:obj_code").params(dept_code=dept_code, obj_code=obj_code).first()
+			if query_list is None:
 				return jsonify(results="0")
 			session.delete(query_list)
 			session.commit()
 			session.close()
 			return jsonify(results="1")
+
 
 	query = session.query(Dept_obj)
 	query_list = query.all()
