@@ -535,7 +535,7 @@ def show_deptobj():
 # 	DBSession.remove()
 
 #Error Handler
-@app.errorhandler(InvalidAPIUsage)
+@app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
 	# response = jsonify(error.to_dict())
 	# response.status_code = error.status_code
