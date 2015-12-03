@@ -3,10 +3,11 @@
 # all the import
 from sqlalchemy import create_engine, desc, asc, func
 from sqlalchemy.orm import sessionmaker, scoped_session
-from flask import Flask, request, redirect, url_for, abort, render_template, flash, jsonify, send_file
+from flask import Flask, request, redirect, url_for, abort, render_template, flash, jsonify
 from flask import session as login_session
 from json import dumps, loads
 from sqlalchemy.ext.declarative import declarative_base
+from flask.ext.cors import CORS
 
 import sys
 import sqlalchemy.exc
@@ -22,6 +23,7 @@ from isp_final import Base, Department, Dept_obj, Object
 
 #create our little application
 app=Flask(__name__)
+CORS(app)
 app.config.from_object(__name__)
 reload(sys)
 sys.setdefaultencoding('utf-8')
