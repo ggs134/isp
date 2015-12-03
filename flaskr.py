@@ -7,7 +7,9 @@ from flask import Flask, request, redirect, url_for, abort, render_template, fla
 from flask import session as login_session
 from json import dumps, loads
 from sqlalchemy.ext.declarative import declarative_base
+
 import sys
+import sqlalchemy.exc
 
 # DB fils import
 from isp_final import Base, Department, Dept_obj, Object
@@ -51,13 +53,53 @@ session = DBSession()
 # 		converted_list.append(individual_object)
 # 	return jsonify(results = converted_list)
 
+#Some Module
+class InvalidUsage(Exception):
+	status_code = 400
+
+	def __init__(self, message, status_code=None, payload=None):
+		Exception.__init__(self)
+		self.message = message
+		if status_code is not None:
+			self.status_code = status_code
+		self.payload = payload
+
+	def to_dict(self):
+		rv = dict(self.payload or ())
+		rv['message'] = self.message
+		return rv
+
+
 
 #main page
 @app.route('/')
 def main_page():
-	return send_file("public/html/main.html", mimetype='text/html')
+	return "Hello, ISP"
 
-#Object Read
+# @app.route('/board1/<int:page_number>')
+# def board1(page_number):
+# 	#총 글의 갯수를 구함
+# 	total_number_writings=int(session.query(func.count('*')).select_from(Board1).scalar())
+# 	# 왜 +2를 해야 하지?? 총 페이지 수를 도출
+# 	total_page_number=int(total_number_writings/10)+2
+# 	if page_number>=total_page_number:
+# 		flash('그 페이지는 존재하지 않습니다')
+# 		return redirect(url_for('board1', page_number=1))
+# 	# count number of writings
+# 	# session.query(Entries.id).order_by(desc(Entries.id)).first()
+# 	if page_number==None:
+# 		page_number=1
+# 	writings1=session.query(Board1).order_by(desc(Board1.id)).limit(10).offset((page_number-1)*10).all()
+# 	session.close()
+# 	return render_template('board1.html', writings1=writings1, page_number=page_number, total_page_number=total_page_number)
+
+#object get
+# @app.route('/object/<obj_code>/<obj_desc>', methods=['GET'])
+# def get_object(obj_code, obj_desc):
+# 	if obj_code == "":
+# 		if 
+
+#Object post, put, delete
 @app.route('/object', methods=['GET','POST','PUT','DELETE'])
 def show_object():
 	if request.method == "POST":
@@ -99,6 +141,7 @@ def show_object():
 
 		elif idf == 'CreateObject':
 			newObj=Object(obj_code = obj_code, obj_desc = obj_desc, obj_priority = obj_priority)
+			
 			session.add(newObj)
 			session.commit()
 			session.close()
@@ -414,22 +457,7 @@ def show_deptobj():
 
 
 
-# @app.route('/board1/<int:page_number>')
-# def board1(page_number):
-# 	#총 글의 갯수를 구함
-# 	total_number_writings=int(session.query(func.count('*')).select_from(Board1).scalar())
-# 	# 왜 +2를 해야 하지?? 총 페이지 수를 도출
-# 	total_page_number=int(total_number_writings/10)+2
-# 	if page_number>=total_page_number:
-# 		flash('그 페이지는 존재하지 않습니다')
-# 		return redirect(url_for('board1', page_number=1))
-# 	# count number of writings
-# 	# session.query(Entries.id).order_by(desc(Entries.id)).first()
-# 	if page_number==None:
-# 		page_number=1
-# 	writings1=session.query(Board1).order_by(desc(Board1.id)).limit(10).offset((page_number-1)*10).all()
-# 	session.close()
-# 	return render_template('board1.html', writings1=writings1, page_number=page_number, total_page_number=total_page_number)
+
 
 # #board2 page
 # @app.route('/board2/<int:page_number>')
@@ -505,6 +533,15 @@ def show_deptobj():
 # @app.teardown_request
 # def shutdown_session(exception=None):
 # 	DBSession.remove()
+
+#Error Handler
+@app.errorhandler(InvalidAPIUsage)
+def handle_invalid_usage(error):
+	# response = jsonify(error.to_dict())
+	# response.status_code = error.status_code
+	# return response
+	# print jsonify(error.to_dict())
+	return jsonify(results=0)
 
 if __name__=='__main__':
 	app.run(host='0.0.0.0', debug=True)
