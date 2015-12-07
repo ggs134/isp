@@ -112,7 +112,7 @@ def show_object():
 	 	idf = data['a'].encode('utf-8')
 	 	obj_code = data['obj_code'].encode('utf-8')
 	 	obj_desc = data['obj_desc'].encode('utf-8')
-	 	obj_priority = data['obj_priority'].encode('utf-8')
+	 	obj_priority = data['obj_priority']
 
 		if idf == 'ShowObject':
 		  	query = session.query(Object)
