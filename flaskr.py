@@ -329,7 +329,7 @@ def show_department():
 
 		if idf=='DeleteDepartment':
 			query = session.query(Department)
-			query_deleted = query.from_statement("Select * from department where dept_code=:dept_code").params(dept_code=dept_code).first()#
+			query_deleted = query.from_statement("SELECT * FROM department WHERE dept_code=:dept_code").params(dept_code=dept_code).first()#
 			session.delete(query_deleted)
 			session.commit()
 			session.close()
