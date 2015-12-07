@@ -110,9 +110,6 @@ def show_object():
 		#the request object already has a method get_json which can give you the json regardless of the content-type if you execute it with force=True
 	 	#get data from requested
 	 	idf = data['a'].encode('utf-8')
-	 	obj_code = data['obj_code'].encode('utf-8')
-	 	obj_desc = data['obj_desc'].encode('utf-8')
-	 	obj_priority = data['obj_priority'].encode('utf-8')
 
 		# if idf == 'ShowObject':
 		#   	query = session.query(Object)
