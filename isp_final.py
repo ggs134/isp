@@ -35,7 +35,7 @@ class Object(Base):
   __tablename__ = 'object'
   obj_code = Column(String(3), primary_key=True)
   obj_desc = Column(String(40))
-  obj_priority = Column(SmallInteger)
+  obj_priority = Column(String(1))
   d_ob = relationship("Dept_obj", backref="object", cascade="all,delete")
 
 engine = create_engine("mysql://root:wjdtnsgud1!@localhost/isp", encoding='utf8', echo=True)

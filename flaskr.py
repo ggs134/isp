@@ -112,7 +112,7 @@ def show_object():
 	 	idf = data['a'].encode('utf-8')
 	 	obj_code = data['obj_code'].encode('utf-8')
 	 	obj_desc = data['obj_desc'].encode('utf-8')
-	 	obj_priority = data['obj_priority']
+	 	obj_priority = data['obj_priority'].encode('utf-8')
 
 		if idf == 'ShowObject':
 		  	query = session.query(Object)
@@ -160,7 +160,7 @@ def show_object():
 	 	idf = data['a'].encode('utf-8')
 	 	obj_code = data['obj_code'].encode('utf-8')
 	 	obj_desc = data['obj_desc'].encode('utf-8')
-	 	obj_priority = data['obj_priority']
+	 	obj_priority = data['obj_priority'].encode('utf-8')
 
 		if idf == 'UpdateObject':
 			#데이터베이스에서 업데이트 하고자 하는 객체를 불러옴
