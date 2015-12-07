@@ -11,6 +11,8 @@ from flask.ext.cors import CORS
 
 import sys
 import sqlalchemy.exc
+import telepot as tp
+
 
 # DB fils import
 from isp_final import Base, Department, Dept_obj, Object
@@ -54,6 +56,12 @@ session = DBSession()
 # 		del individual_object['_sa_instance_state']
 # 		converted_list.append(individual_object)
 # 	return jsonify(results = converted_list)
+
+#Telegram Module
+def message_me(message):
+	bot = tp.Bot('155578772:AAGngKO2rPtjzC2_P3CM7FSsL-FIAfzRk8A')
+	bot.sendMessage(33612976,str(message))
+
 
 #Some Module
 class InvalidUsage(Exception):
@@ -622,8 +630,9 @@ def show_deptobj():
 def handle_invalid_usage(error):
 	# response = jsonify(error.to_dict())
 	# response.status_code = error.status_code
-	# return response
+	# return responset
 	# print jsonify(error.to_dict())
+	message_me(error.to_dict())
 	return jsonify(results=0)
 
 if __name__=='__main__':
