@@ -235,15 +235,14 @@ def show_department():
 	 	#get data from requested
 	 	idf = data['a'].encode('utf-8')
 
-	 	dept_code = data['dept_code'].encode('utf-8')
-	 	dept_desc = data['dept_desc'].encode('utf-8')
-
-	 	if dept_code is None:
-	 		dept_code = None
-	 	if dept_desc is None:
-	 		dept_desc = None
+	 	# dept_code = data['dept_code'].encode('utf-8')
+	 	# dept_desc = data['dept_desc'].encode('utf-8')
 
 		if idf == 'ShowDepartment':
+
+			dept_code = data['dept_code'].encode('utf-8')
+	 		dept_desc = data['dept_desc'].encode('utf-8')
+
 		  	query = session.query(Department)
 			query_list = query.from_statement("select * from department where dept_code=:dept_code OR dept_desc=:dept_desc").params(dept_code=dept_code, dept_desc=dept_desc).all()
 			if query_list is not None:
@@ -258,6 +257,10 @@ def show_department():
 		  		return jsonify(results = "0")
 		
 		elif idf == 'CreateDepartment':
+
+			dept_code = data['dept_code'].encode('utf-8')
+	 		dept_desc = data['dept_desc'].encode('utf-8')
+
 			newDept=Department(dept_code = dept_code, dept_desc = dept_desc)
 			session.add(newDept)
 			session.commit()
@@ -265,6 +268,10 @@ def show_department():
 			return jsonify(results = "1")
 
 		if idf =='UpdateDepartment':
+
+			dept_code = data['dept_code'].encode('utf-8')
+	 		dept_desc = data['dept_desc'].encode('utf-8')
+
 			query = session.query(Department)
 			query_updated = query.from_statement("select * from department where dept_code=:dept_code").params(dept_code=dept_code).first() ##
 			if query_updated is None:
@@ -277,6 +284,9 @@ def show_department():
 			return jsonify(results = "1")
 
 		if idf=='DeleteDepartment':
+
+			dept_code = data['dept_code'].encode('utf-8')
+
 			query = session.query(Department)
 			query_deleted = query.from_statement("SELECT * FROM department WHERE dept_code=:dept_code").params(dept_code=dept_code).first()#
 			session.delete(query_deleted)
