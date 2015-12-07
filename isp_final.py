@@ -14,7 +14,7 @@ class Department(Base): #조직
   __tablename__ = 'department'
   dept_code = Column(String(4), primary_key=True)
   dept_desc = Column(String(30))
-  d_o = relationship("Dept_obj", backref="department")
+  d_o = relationship("Dept_obj", backref="department", cascade="all,delete")
 #조직(department)과 조직목표(dept_obj)는 one to many관계
 #조직(department)은 조직내(department.d_o)를 이용해서 조직목표 클레스(Dept_obj)객체 참조가 가능하다.
 #또한 조직목표 클레스(Dept_obj)객체도 조직(department)을 참조 가능하다.
@@ -36,7 +36,7 @@ class Object(Base):
   obj_code = Column(String(3), primary_key=True)
   obj_desc = Column(String(40))
   obj_priority = Column(SmallInteger)
-  d_ob = relationship("Dept_obj", backref="object")
+  d_ob = relationship("Dept_obj", backref="object", cascade="all,delete")
 
 engine = create_engine("mysql://root:wjdtnsgud1!@localhost/isp", encoding='utf8', echo=True)
 Base.metadata.create_all(engine)

@@ -95,7 +95,7 @@ def main_page():
 # 	session.close()
 # 	return render_template('board1.html', writings1=writings1, page_number=page_number, total_page_number=total_page_number)
 
-#object get
+# #object get
 # @app.route('/object/<obj_code>/<obj_desc>', methods=['GET'])
 # def get_object(obj_code, obj_desc):
 # 	if obj_code == "":
