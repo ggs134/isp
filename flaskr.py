@@ -276,6 +276,14 @@ def show_department():
 			session.close()
 			return jsonify(results = "1")
 
+		if idf=='DeleteDepartment':
+			query = session.query(Department)
+			query_deleted = query.from_statement("SELECT * FROM department WHERE dept_code=:dept_code").params(dept_code=dept_code).first()#
+			session.delete(query_deleted)
+			session.commit()
+			session.close()
+			return jsonify(results = "1")
+
 		elif type(idf) == type("") :
 		  	return jsonify(results = 0)
 
@@ -321,19 +329,19 @@ def show_department():
 	# 		session.close()
 	# 		return jsonify(results = "1")
 
-	elif request.method=='DELETE':
-		data = request.get_json(force=True)
-		idf = data['a'].encode('utf-8')
-		dept_code = data['dept_code'].encode('utf-8')
-	 	#dept_desc = data['dept_desc'].encode('utf-8')#
+	# elif request.method=='DELETE':
+	# 	data = request.get_json(force=True)
+	# 	idf = data['a'].encode('utf-8')
+	# 	dept_code = data['dept_code'].encode('utf-8')
+	#  	#dept_desc = data['dept_desc'].encode('utf-8')#
 
-		if idf=='DeleteDepartment':
-			query = session.query(Department)
-			query_deleted = query.from_statement("SELECT * FROM department WHERE dept_code=:dept_code").params(dept_code=dept_code).first()#
-			session.delete(query_deleted)
-			session.commit()
-			session.close()
-			return jsonify(results = "1")
+	# 	if idf=='DeleteDepartment':
+	# 		query = session.query(Department)
+	# 		query_deleted = query.from_statement("SELECT * FROM department WHERE dept_code=:dept_code").params(dept_code=dept_code).first()#
+	# 		session.delete(query_deleted)
+	# 		session.commit()
+	# 		session.close()
+	# 		return jsonify(results = "1")
 
 	query = session.query(Department)
 	query_list = query.all()
