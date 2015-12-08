@@ -241,7 +241,7 @@ def show_object():
 	query = session.query(Object)
 	query_list = query.all()
 	converted_list = []
-	for i in query_list:
+	for i.encode('utf-8') in query_list:
 		individual_object = i.__dict__.copy()
 		del individual_object['_sa_instance_state']
 		converted_list.append(individual_object)
