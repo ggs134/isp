@@ -1,0 +1,43 @@
+/*body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}*/
+
+.inputform {
+	width: 400px;
+	height: 450px;
+}
+
+.navpills {
+	margin: 5px 0px;
+}
+
+.juitable {
+    margin: 0px 0px 10px 0px;
+}
+
+.tab-elem1 {
+}
+
+.tab-elem2 {
+	display: none;
+}
+
+.tab-elem3 {
+	display: none;
+}
+
+.container {
+    height: 800px;
+    width: 1200px;
+	position: relative;
+}
+
+.loding-progress {
+    width: 400px;
+    padding-left: 200px;
+}

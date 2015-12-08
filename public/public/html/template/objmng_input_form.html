@@ -1,0 +1,18 @@
+<form class="input-form">
+  <div class="form-group">
+    <label for="objectiveCode">목표 코드</label>
+    <input type="text" class="form-control" id="objectiveCode" placeholder="목표 코드" ng-model="obj_code">
+  </div>
+  <div class="form-group">
+    <label for="objectiveDesc">목표 설명</label>
+    <input type="text" class="form-control" id="objectiveDesc" placeholder="목표 설명" ng-model="obj_desc">
+  </div>
+  <div class="form-group">
+    <label for="objectivePriority">목표 중요도</label>
+    <input type="text" class="form-control" id="objectivePriority" placeholder="목표 중요도" ng-model="obj_priority">
+  </div>
+  <button type="button" class="btn btn-success  form-button form-inline" ng-click="queryObjData()">조회</button>
+  <button type="button" class="btn btn-info  form-button form-inline" ng-click="saveObjData()">입력</button>
+  <button type="button" class="btn btn-warning  form-button form-inline" ng-click="updateObjData()">수정</button>
+  <button type="button" class="btn btn-danger  form-button form-inline" ng-click="deleteObjData()">삭제</button>
+</form>

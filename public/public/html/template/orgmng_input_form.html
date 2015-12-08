@@ -1,0 +1,14 @@
+<form class="input-form">
+  <div class="form-group">
+    <label for="organizationCode">조직 코드</label>
+    <input type="text" class="form-control" id="organizationCode" placeholder="조직 코드" ng-model="dept_code">
+  </div>
+  <div class="form-group">
+    <label for="organizationName">조직명</label>
+    <input type="text" class="form-control" id="organizationName" placeholder="조직명" ng-model="dept_desc">
+  </div>
+  <button type="button" class="btn btn-success  form-button form-inline" ng-click="queryOrgData()">조회</button>
+  <button type="button" class="btn btn-info  form-button form-inline" ng-click="saveOrgData()">입력</button>
+  <button type="button" class="btn btn-warning  form-button form-inline" ng-click="updateOrgData()">수정</button>
+  <button type="button" class="btn btn-danger  form-button form-inline" ng-click="deleteOrgData()">삭제</button>
+</form>

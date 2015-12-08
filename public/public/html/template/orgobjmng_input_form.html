@@ -1,0 +1,34 @@
+<form class="input-form">
+  <div class="form-group">
+    <label for="objectiveCode">목표 코드</label>
+    <input type="text" class="form-control" id="objectiveCode" placeholder="목표 코드" ng-model="obj_code">
+  </div>
+  <div class="form-group">
+    <label for="objectiveDesc">목표 설명</label>
+    <input type="text" class="form-control" id="objectiveDesc" placeholder="목표 설명" ng-model="obj_desc">
+  </div>
+  <div class="form-group">
+    <label for="organizationCode">조직 코드</label>
+    <input type="text" class="form-control" id="organizationCode" placeholder="조직 코드" ng-model="dept_code">
+  </div>
+  <div class="form-group">
+    <label for="organizationName">조직명</label>
+    <input type="text" class="form-control" id="organizationName" placeholder="조직명" ng-model="dept_desc">
+  </div>
+  <div class="form-group">
+  <label for="responsibility">책임</label>
+  <checkbox ng-model="dept_obj_resp" ng-click="onChange()" class="btn-info checkbox checkbox-resp" id="responsibility"></checkbox>
+  <label for="authority">권한</label>
+  <checkbox ng-model="dept_obj_auth" class="btn-info checkbox checkbox-auth" id="authority"></checkbox>
+  <label for="experience">경험</label>
+  <checkbox ng-model="dept_obj_exp" class="btn-info checkbox checkbox-exp" id="experience"></checkbox>
+  <label for="work">작업</label>
+  <checkbox ng-model="dept_obj_work" class="btn-info checkbox checkbox-work" id="work"></checkbox>
+  <label for="reference">참조</label>
+  <checkbox ng-model="dept_obj_ref" class="btn-info checkbox checkbox-ref" id="reference"></checkbox>
+  </div>
+  <button type="button" class="btn btn-success  form-button form-inline" ng-click="queryOrgObjData()">조회</button>
+  <button type="button" class="btn btn-info  form-button form-inline" ng-click="saveOrgObjData()">입력</button>
+  <button type="button" class="btn btn-warning  form-button form-inline" ng-click="updateOrgObjData()">수정</button>
+  <button type="button" class="btn btn-danger  form-button form-inline" ng-click="deleteOrgObjData()">삭제</button>
+</form>
