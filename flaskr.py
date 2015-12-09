@@ -84,7 +84,11 @@ class InvalidUsage(Exception):
 #main page
 @app.route('/')
 def main_page():
-	return "Hello, ISP"
+	query = session.query(Department)
+	allList = query.all()
+	for i in allList:
+		result = dumps(str(i))
+	return result
 
 # @app.route('/board1/<int:page_number>')
 # def board1(page_number):

@@ -1,5 +1,6 @@
-This is GSS annonymous board project
+This is ISP Project
 
-test commit added in README.md
+If you want to commit to this project, please contact me.
 
-test1
+master branch : back-end code
+KYD branch : front-end code
